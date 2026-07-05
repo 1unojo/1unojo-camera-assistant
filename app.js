@@ -453,7 +453,15 @@ function applyAIRecommendation(ai) {
   if (!ai) return;
 
   if (ai.scene) $("sceneOut").textContent = ai.scene;
-  if (ai.confidence) $("confidenceOut").textContent = `${ai.confidence}%`;
+  if (ai.confidence) {
+  let confidence = Number(ai.confidence);
+
+  if (confidence <= 1) {
+    confidence = Math.round(confidence * 100);
+  }
+
+  $("confidenceOut").textContent = `${confidence}%`;
+}
 
   $("sceneIcon").textContent = ai.icon || "◉";
   $("sceneNote").textContent = ai.scene_note || ai.reason || "Análisis generado por IA.";
