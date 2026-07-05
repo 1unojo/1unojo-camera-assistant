@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>1UnOjo Camera Assistant V3</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <button class="icon" id="resetBtn">↻</button>
+      <img src="assets/logo.png" class="logo" alt="1UnOjo logo" />
+      <button class="icon" id="saveBtn">▣</button>
+    </header>
+
+    <section class="hero card">
+      <div>
+        <small>Camera Assistant V3</small>
+        <h1>Analiza una foto y recomienda exposición</h1>
+        <p>Web app local: foto, cámara, ISO, WB, ND, waveform, histograma y false color.</p>
+      </div>
+    </section>
+
+    <nav class="tabs">
+      <button class="tab active" data-view="shoot">Set</button>
+      <button class="tab" data-view="preview">Preview</button>
+      <button class="tab" data-view="scopes">Scopes</button>
+      <button class="tab" data-view="camera">Cámara</button>
+    </nav>
+
+    <section id="shoot" class="view active">
+      <article class="card">
+        <div class="title"><h2>Foto del lugar</h2><label for="photoInput">Cambiar</label></div>
+        <input id="photoInput" type="file" accept="image/*" capture="environment" hidden>
+        <div class="photo" id="photoDrop">
+          <img id="photoPreview" alt="Foto del lugar">
+          <div id="placeholder" class="placeholder"><span>📷</span><b>Toca para subir o tomar foto</b><small>El análisis corre dentro del navegador.</small></div>
+        </div>
+        <div class="actions"><label class="btn primary" for="photoInput">Tomar / importar</label><button class="btn" id="demoBtn">Demo</button></div>
+      </article>
+
+      <article class="card scene">
+        <div class="sun" id="sceneIcon">◐</div>
+        <div><small>Escena detectada</small><h2 id="sceneOut">Esperando foto</h2><p id="sceneNote">Sube una imagen para comenzar.</p></div>
+        <span class="badge" id="confidenceOut">—</span>
+      </article>
+
+      <article class="card rec">
+        <div class="title"><h2>Recomendación</h2><span class="badge" id="cameraBadge">RED</span></div>
+        <div class="grid six">
+          <div><small>ISO</small><strong id="isoOut">800</strong><em>base</em></div>
+          <div><small>T-Stop</small><strong id="apertureOut">T2.8</strong><em>look</em></div>
+          <div><small>Shutter</small><strong id="shutterOut">1/48</strong><em>180°</em></div>
+          <div><small>WB</small><strong id="wbOut">5600K</strong><em id="wbLabel">día</em></div>
+          <div><small>Codec</small><strong id="codecOut">R3D HQ</strong><em id="codecLabel">8K</em></div>
+          <div><small>Gamma</small><strong id="gammaOut">Log3G10</strong><em id="spaceOut">RWG</em></div>
+        </div>
+      </article>
+
+      <article class="card nd">
+        <div class="title"><h2>Filtro ND</h2><span id="stopsOut" class="badge">0 pasos</span></div>
+        <div class="ndrow"><div><small>Usar</small><h2 id="ndOut">Sin ND</h2><p id="ndNote">La app sugerirá 0.9, 1.8 o ambos.</p></div><div class="ndcircles"><span id="ndA">—</span><b>+</b><span id="ndB">—</span></div></div>
+      </article>
+    </section>
+
+    <section id="preview" class="view">
+      <article class="card">
+        <div class="title"><h2>Antes / después</h2><span id="adjustBadge" class="badge">—</span></div>
+        <div class="compare"><canvas id="originalCanvas"></canvas><canvas id="adjustedCanvas"></canvas><div class="divider"></div><span class="tag left">Original</span><span class="tag right">Ajuste</span></div>
+        <div class="panel"><div><small>Cambio visual</small><strong id="visualOut">—</strong></div><div><small>Objetivo</small><strong id="targetOut">Proteger altas luces</strong></div></div>
+      </article>
+      <article class="card"><h2>Consejo</h2><p class="note" id="tipOut">Sube una foto para recibir una recomendación.</p></article>
+    </section>
+
+    <section id="scopes" class="view">
+      <article class="card"><div class="title"><h2>False Color</h2><span>IRE</span></div><canvas id="falseColorCanvas"></canvas><div class="scale"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div></article>
+      <article class="card"><h2>Waveform</h2><canvas id="waveformCanvas"></canvas></article>
+      <article class="card"><h2>Histograma</h2><canvas id="histCanvas"></canvas></article>
+      <article class="card metrics"><div><small>Brillo</small><strong id="mBright">—</strong></div><div><small>Contraste</small><strong id="mContrast">—</strong></div><div><small>Altas</small><strong id="mHigh">—</strong></div><div><small>Sombras</small><strong id="mShadow">—</strong></div></article>
+    </section>
+
+    <section id="camera" class="view">
+      <article class="card controls">
+        <h2>Cámara y look</h2>
+        <label>Cámara<select id="cameraSelect"></select></label>
+        <label>ISO preferido<select id="isoBase"></select></label>
+        <label>Apertura deseada<select id="apertureBase"><option>T1.4</option><option>T1.9</option><option selected>T2.8</option><option>T4</option><option>T5.6</option><option>T8</option></select></label>
+        <label>Frame rate<select id="fpsBase"><option>23.98</option><option selected>24</option><option>29.97</option><option>30</option><option>59.94</option><option>60</option></select></label>
+        <label>Prioridad<select id="priority"><option value="highlights" selected>Proteger altas luces</option><option value="skin">Piel primero</option><option value="shadows">Levantar sombras</option></select></label>
+      </article>
+      <article class="card"><div class="title"><h2>Perfil seleccionado</h2><span id="camBrand" class="badge">—</span></div><p class="note" id="camNotes">Selecciona una cámara.</p><div class="profile"><div><small>ISO nativo</small><strong id="camISO">—</strong></div><div><small>Color</small><strong id="camColor">—</strong></div><div><small>Gamma</small><strong id="camGamma">—</strong></div></div></article>
+    </section>
+  </main>
+  <canvas id="workCanvas" hidden></canvas>
+  <script src="cameras.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
