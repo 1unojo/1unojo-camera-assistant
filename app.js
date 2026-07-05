@@ -340,6 +340,55 @@ function recommend(o) {
   };
 }
 
+
+async function getLocationData() {
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) {
+      resolve({
+        available: false,
+        reason: "Geolocalización no disponible en este navegador."
+      });
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        resolve({
+          available: true,
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+          accuracyMeters: Math.round(pos.coords.accuracy || 0)
+        });
+      },
+      (error) => {
+        resolve({
+          available: false,
+          reason: error.message || "El usuario no permitió compartir ubicación."
+        });
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 8000,
+        maximumAge: 60000
+      }
+    );
+  });
+}
+
+async function getClientMetadata() {
+  const now = new Date();
+  const location = await getLocationData();
+
+  return {
+    dateISO: now.toISOString(),
+    localDate: now.toLocaleDateString(),
+    localTime: now.toLocaleTimeString(),
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    location
+  };
+}
+
+
 async function analyzeWithAI() {
   if (!currentImageDataUrl) {
     alert("Primero sube o toma una foto.");
@@ -358,6 +407,7 @@ async function analyzeWithAI() {
     if ($("aiAnalysis")) $("aiAnalysis").textContent = "Analizando la imagen con IA...";
 
     const selectedCamera = cam();
+    const metadata = await getClientMetadata();
 
     const response = await fetch("/api/analyze", {
       method: "POST",
@@ -366,6 +416,7 @@ async function analyzeWithAI() {
       },
       body: JSON.stringify({
         image: currentImageDataUrl,
+        metadata,
         camera: {
           brand: selectedCamera.brand,
           model: selectedCamera.model,

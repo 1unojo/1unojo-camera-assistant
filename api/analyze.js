@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { image, camera, preferences, metrics } = req.body;
+    const { image, camera, preferences, metrics, metadata } = req.body;
 
     if (!image) {
       return res.status(400).json({ error: "No image provided" });
@@ -27,12 +27,17 @@ ${JSON.stringify(preferences, null, 2)}
 Métricas locales:
 ${JSON.stringify(metrics, null, 2)}
 
+Contexto de fecha, hora y ubicación:
+${JSON.stringify(metadata, null, 2)}
+
 Reglas:
 - Prioriza mantener ISO nativo si es posible.
 - Recomienda ND antes que cerrar demasiado el lente.
 - Para RED, prefiere Log3G10 / REDWideGamutRGB cuando aplique.
 - Si hay altas luces fuertes, advierte posible clipping.
 - Si hay piel visible, estima si está bien expuesta.
+- Usa la fecha, hora local, zona horaria y ubicación para inferir si puede ser amanecer, mediodía, golden hour, blue hour o noche.
+- Si no hay ubicación disponible, usa solo la imagen y la hora local.
 - Sé breve y técnico.
 
 Devuelve este formato exacto:
