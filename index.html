@@ -8,19 +8,14 @@
 </head>
 <body>
   <main class="app">
-    <header class="topbar">
-      <button class="icon" id="resetBtn" aria-label="Reset">↻</button>
-      <img src="assets/logo.png" class="logo" alt="1UnOjo logo" />
-      <button class="icon" id="saveBtn" aria-label="Guardar">▣</button>
-    </header>
-
-    <section class="hero card">
-      <div>
-        <small>Camera Assistant</small>
-        <h1>Analiza una foto y recomienda exposición</h1>
-        <p>IA, cámara, lente, ISO, WB, ND, waveform, histograma y false color.</p>
+    <header class="app-header">
+      <button class="round-btn" id="resetBtn" aria-label="Reset">↻</button>
+      <div class="brand">
+        <img src="assets/logo.png" class="logo" alt="1UnOjo logo" />
+        <h1>Camera <span>Assistant</span></h1>
       </div>
-    </section>
+      <button class="round-btn" id="saveBtn" aria-label="Guardar">▣</button>
+    </header>
 
     <nav class="tabs">
       <button class="tab active" data-view="shoot">Set</button>
@@ -30,15 +25,22 @@
     </nav>
 
     <section id="shoot" class="view active">
-      <article class="card controls setup-card">
-        <div class="title">
-          <h2>1. Cámara</h2>
-          <span id="camBrand" class="badge">—</span>
+      <article class="sun-strip card">
+        <div class="sun-icon">☀</div>
+        <div><small>Hora</small><strong id="sunTime">Ahora</strong></div>
+        <div><small>Luz</small><strong id="sunMode">Set</strong></div>
+        <div><small>Sol</small><strong id="sunDirection">—</strong></div>
+      </article>
+
+      <article class="card setup-card">
+        <div class="section-title">
+          <h2>1. Cámara y lente</h2>
+          <span id="camBrand" class="pill">—</span>
         </div>
 
-        <label>Cámara<select id="cameraSelect"></select></label>
+        <label class="select-card"><span>Cámara</span><select id="cameraSelect"></select></label>
 
-        <label>Lente
+        <label class="select-card"><span>Lente</span>
           <select id="lensSelect">
             <option>DZOFilm Vespid 18mm T2.1</option>
             <option>DZOFilm Catta 20-55mm</option>
@@ -52,28 +54,14 @@
           </select>
         </label>
 
-        <div class="setup-grid">
-          <label>ISO<select id="isoBase"></select></label>
-          <label>Apertura
-            <select id="apertureBase">
-              <option>T1.4</option><option>T1.9</option><option selected>T2.8</option><option>T4</option><option>T5.6</option><option>T8</option>
-            </select>
-          </label>
-          <label>FPS
-            <select id="fpsBase">
-              <option>23.98</option><option selected>24</option><option>29.97</option><option>30</option><option>59.94</option><option>60</option>
-            </select>
-          </label>
-          <label>Prioridad
-            <select id="priority">
-              <option value="highlights" selected>Proteger altas luces</option>
-              <option value="skin">Piel primero</option>
-              <option value="shadows">Levantar sombras</option>
-            </select>
-          </label>
+        <div class="control-grid">
+          <label><span>ISO</span><select id="isoBase"></select></label>
+          <label><span>Apertura</span><select id="apertureBase"><option>T1.4</option><option>T1.9</option><option selected>T2.8</option><option>T4</option><option>T5.6</option><option>T8</option></select></label>
+          <label><span>FPS</span><select id="fpsBase"><option>23.98</option><option selected>24</option><option>29.97</option><option>30</option><option>59.94</option><option>60</option></select></label>
+          <label><span>Prioridad</span><select id="priority"><option value="highlights" selected>Proteger altas luces</option><option value="skin">Piel primero</option><option value="shadows">Levantar sombras</option></select></label>
         </div>
 
-        <div class="profile">
+        <div class="mini-specs">
           <div><small>ISO nativo</small><strong id="camISO">—</strong></div>
           <div><small>Color</small><strong id="camColor">—</strong></div>
           <div><small>Gamma</small><strong id="camGamma">—</strong></div>
@@ -81,75 +69,74 @@
         <p class="note" id="camNotes">Selecciona una cámara.</p>
       </article>
 
-      <article class="card">
-        <div class="title"><h2>2. Foto del lugar</h2><label for="photoInput">Cambiar</label></div>
+      <article class="card photo-card">
+        <div class="section-title"><h2>2. Foto</h2><label for="photoInput" class="small-action">Cambiar</label></div>
         <input id="photoInput" type="file" accept="image/*" capture="environment" hidden>
         <div class="photo" id="photoDrop">
           <img id="photoPreview" alt="Foto del lugar">
-          <div id="placeholder" class="placeholder"><span>📷</span><b>Toca para subir o tomar foto</b><small>La app analizará la imagen y dará recomendaciones.</small></div>
+          <div id="placeholder" class="placeholder"><span>📷</span><b>Toca para subir o tomar foto</b><small>La IA analizará la imagen, ubicación y hora.</small></div>
         </div>
         <div class="actions">
-          <label class="btn primary" for="photoInput">Tomar / importar</label>
-          <button class="btn" id="demoBtn">Demo</button>
-          <button class="btn primary" id="aiAnalyzeBtn" type="button">Analizar con IA</button>
+          <label class="primary-btn" for="photoInput">Tomar / importar</label>
+          <button class="ghost-btn" id="demoBtn">Demo</button>
+          <button class="primary-btn" id="aiAnalyzeBtn" type="button">Analizar imagen</button>
         </div>
       </article>
 
-      <article class="card scene">
-        <div class="sun" id="sceneIcon">◐</div>
+      <article class="card scene-card">
+        <div class="scene-icon" id="sceneIcon">◐</div>
         <div><small>Escena detectada</small><h2 id="sceneOut">Esperando foto</h2><p id="sceneNote">Sube una imagen para comenzar.</p></div>
-        <span class="badge" id="confidenceOut">—</span>
+        <span class="pill green" id="confidenceOut">—</span>
       </article>
 
-      <article class="card rec">
-        <div class="title"><h2>Recomendación</h2><span class="badge" id="cameraBadge">RED</span></div>
-        <div class="grid six">
-          <div><small>ISO</small><strong id="isoOut">800</strong><em>base</em></div>
-          <div><small>T-Stop</small><strong id="apertureOut">T2.8</strong><em>look</em></div>
-          <div><small>Shutter</small><strong id="shutterOut">1/48</strong><em>180°</em></div>
-          <div><small>WB</small><strong id="wbOut">5600K</strong><em id="wbLabel">día</em></div>
-          <div><small>Codec</small><strong id="codecOut">R3D HQ</strong><em id="codecLabel">8K</em></div>
-          <div><small>Gamma</small><strong id="gammaOut">Log3G10</strong><em id="spaceOut">RWG</em></div>
+      <article class="card">
+        <div class="section-title"><h2>Exposición recomendada</h2><span class="pill" id="cameraBadge">RED</span></div>
+        <div class="exposure-grid">
+          <div><small>ISO</small><strong id="isoOut">800</strong><button class="help-dot" type="button">?</button></div>
+          <div><small>Apertura</small><strong id="apertureOut">T2.8</strong><button class="help-dot" type="button">?</button></div>
+          <div><small>Shutter</small><strong id="shutterOut">1/48</strong><button class="help-dot" type="button">?</button></div>
+          <div><small>WB</small><strong id="wbOut">5600K</strong><em id="wbLabel">día</em><button class="help-dot" type="button">?</button></div>
+          <div><small>Codec</small><strong id="codecOut">R3D HQ</strong><em id="codecLabel">8K</em><button class="help-dot" type="button">?</button></div>
+          <div><small>Gamma</small><strong id="gammaOut">Log3G10</strong><em id="spaceOut">RWG</em><button class="help-dot" type="button">?</button></div>
         </div>
       </article>
 
-      <article class="card nd">
-        <div class="title"><h2>Filtro ND</h2><span id="stopsOut" class="badge">0 pasos</span></div>
-        <div class="ndrow">
-          <div><small>Usar</small><h2 id="ndOut">Sin ND</h2><p id="ndNote">La app sugerirá 0.9, 1.8 o ambos.</p></div>
+      <article class="card nd-card">
+        <div class="section-title"><h2>Filtro ND</h2><span id="stopsOut" class="pill green">0 pasos</span></div>
+        <div class="nd-layout">
+          <div><small>Recomendado</small><h2 id="ndOut">Sin ND</h2><p id="ndNote">La app sugerirá 0.9, 1.8 o ambos.</p></div>
           <div class="ndcircles"><span id="ndA">—</span><b>+</b><span id="ndB">—</span></div>
         </div>
       </article>
 
-      <article class="card">
-        <div class="title"><h2>Análisis IA</h2><span class="badge" id="aiStatus">Offline</span></div>
-        <p class="note" id="aiAnalysis">Cuando subas una foto, presiona “Analizar con IA” para recibir una recomendación profesional.</p>
+      <article class="card ai-card">
+        <div class="section-title"><h2>Análisis IA</h2><span class="pill green" id="aiStatus">Offline</span></div>
+        <p class="note" id="aiAnalysis">Cuando subas una foto, presiona “Analizar imagen” para recibir una recomendación profesional.</p>
+        <div class="ai-chips"><span>☀ Luz</span><span>◐ Contraste</span><span>▣ Exposición</span><span>✦ Sugerencia</span></div>
       </article>
     </section>
 
     <section id="preview" class="view">
-      <article class="card">
-        <div class="title"><h2>Antes / después</h2><span id="adjustBadge" class="badge">—</span></div>
+      <article class="card photo-card">
+        <div class="section-title"><h2>Preview</h2><span id="adjustBadge" class="pill">—</span></div>
         <div class="compare"><canvas id="originalCanvas"></canvas><canvas id="adjustedCanvas"></canvas><div class="divider"></div><span class="tag left">Original</span><span class="tag right">Ajuste</span></div>
-        <div class="panel"><div><small>Cambio visual</small><strong id="visualOut">—</strong></div><div><small>Objetivo</small><strong id="targetOut">Proteger altas luces</strong></div></div>
+        <div class="two-grid"><div><small>Cambio visual</small><strong id="visualOut">—</strong></div><div><small>Objetivo</small><strong id="targetOut">Proteger altas luces</strong></div></div>
       </article>
       <article class="card"><h2>Consejo</h2><p class="note" id="tipOut">Sube una foto para recibir una recomendación.</p></article>
     </section>
 
     <section id="scopes" class="view">
-      <article class="card"><div class="title"><h2>False Color</h2><span>IRE</span></div><canvas id="falseColorCanvas"></canvas><div class="scale"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div></article>
+      <article class="card"><div class="section-title"><h2>False Color</h2><span>IRE</span></div><canvas id="falseColorCanvas"></canvas><div class="scale"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div></article>
       <article class="card"><h2>Waveform</h2><canvas id="waveformCanvas"></canvas></article>
       <article class="card"><h2>Histograma</h2><canvas id="histCanvas"></canvas></article>
       <article class="card metrics"><div><small>Brillo</small><strong id="mBright">—</strong></div><div><small>Contraste</small><strong id="mContrast">—</strong></div><div><small>Altas</small><strong id="mHigh">—</strong></div><div><small>Sombras</small><strong id="mShadow">—</strong></div></article>
     </section>
 
     <section id="camera" class="view">
-      <article class="card">
-        <div class="title"><h2>Guías de cámara</h2><span class="badge">Próximo</span></div>
-        <p class="note">Aquí añadiremos los iconos ⓘ para explicar dónde cambiar ISO, WB, shutter, codec, gamma, false color y ND según la cámara seleccionada.</p>
-      </article>
+      <article class="card"><div class="section-title"><h2>Guías de cámara</h2><span class="pill">Próximo</span></div><p class="note">Aquí añadiremos los iconos ? para indicar dónde cambiar ISO, WB, shutter, codec, gamma, false color y ND según la cámara seleccionada.</p></article>
     </section>
   </main>
+
   <canvas id="workCanvas" hidden></canvas>
   <script src="cameras.js"></script>
   <script src="app.js"></script>
