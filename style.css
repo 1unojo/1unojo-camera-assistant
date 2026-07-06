@@ -448,25 +448,41 @@ select:focus {
 
 .scene-card {
   display: grid;
-  grid-template-columns: 54px 1fr auto;
-  gap: 14px;
-  align-items: center;
+  grid-template-columns: 56px minmax(0,1fr);
+  gap: 16px;
+  align-items: flex-start;
 }
 
 .scene-icon,
 .round-signal {
-  width: 54px;
-  height: 54px;
-  font-size: 25px;
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  max-width: 56px;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 24px;
+  line-height: 1;
+  text-align: center;
 }
 
 #sceneOut {
   margin: 0;
-  font-size: clamp(21px, 5.4vw, 29px);
-  overflow-wrap: break-word;
+  font-size: 32px;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  max-width: 100%;
 }
 
-#sceneNote,
+#sceneNote {
+  margin-top: 10px;
+  line-height: 1.45;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  white-space: pre-line;
+}
+
 #ndNote,
 #aiAnalysis {
   max-width: 100%;
@@ -677,11 +693,19 @@ select:focus {
 }
 
 body.photo-loaded #photoDrop {
+  display: grid !important;
+}
+
+body.photo-loaded #photoPreview {
+  display: block !important;
+}
+
+body.photo-loaded #placeholder {
   display: none !important;
 }
 
 body.photo-loaded .action-row {
-  margin-top: 0;
+  margin-top: 14px;
 }
 
 @media (max-width: 480px) {
@@ -730,19 +754,29 @@ body.photo-loaded .action-row {
   }
 
   .scene-card {
-    grid-template-columns: 46px 1fr;
-    align-items: start;
+    grid-template-columns: 52px minmax(0,1fr);
+    gap: 12px;
+    align-items: flex-start;
   }
 
   .scene-card .status-pill {
     grid-column: 2;
     width: fit-content;
+    margin-top: 8px;
   }
 
   .scene-icon,
   .round-signal {
-    width: 46px;
-    height: 46px;
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    max-width: 52px;
+    font-size: 22px;
+  }
+
+  #sceneOut {
+    font-size: clamp(24px, 8.2vw, 32px);
+    line-height: 1.05;
   }
 
   .nd-layout {
@@ -758,4 +792,17 @@ body.photo-loaded .action-row {
   .metrics {
     grid-template-columns: 1fr;
   }
+}
+
+
+/* Safety: internal canvas should never appear as a repeated photo */
+[hidden],
+#workCanvas {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
 }
