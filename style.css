@@ -448,7 +448,7 @@ select:focus {
 
 .scene-card {
   display: grid;
-  grid-template-columns: 56px minmax(0,1fr);
+  grid-template-columns: 56px minmax(0, 1fr);
   gap: 16px;
   align-items: flex-start;
 }
@@ -693,19 +693,11 @@ select:focus {
 }
 
 body.photo-loaded #photoDrop {
-  display: grid !important;
-}
-
-body.photo-loaded #photoPreview {
-  display: block !important;
-}
-
-body.photo-loaded #placeholder {
   display: none !important;
 }
 
 body.photo-loaded .action-row {
-  margin-top: 14px;
+  margin-top: 0;
 }
 
 @media (max-width: 480px) {
@@ -754,7 +746,7 @@ body.photo-loaded .action-row {
   }
 
   .scene-card {
-    grid-template-columns: 52px minmax(0,1fr);
+    grid-template-columns: 52px minmax(0, 1fr);
     gap: 12px;
     align-items: flex-start;
   }
